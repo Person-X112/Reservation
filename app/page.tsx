@@ -1,9 +1,12 @@
 'use client';
 import { useState } from "react";
 import Link from "next/link";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 export default function Home() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 4000 })]);
 
   return (
     <main
@@ -11,8 +14,8 @@ export default function Home() {
         fontFamily: "sans-serif",
         background: "#f7f6f2",
         minHeight: "100vh",
-        scrollSnapType: "y mandatory",
-        overflowY: "scroll",
+        
+        overflow: "hidden",
       }}
     >
       {/* Navbar */}
@@ -102,13 +105,40 @@ export default function Home() {
           position: "relative",
         }}
       >
+        {/* Carousel */}
+        <div
+        className="embla"
+        ref={emblaRef}
+        style={{ position: "absolute", inset: 0, width: "100vw", overflow: "hidden" }}
+      >
+        <div className="embla__container" style={{ display: "flex", height: "100%" }}>
+          {["/hero-cafe-1.jpg", "/hero-cafe-2.jpg", "/hero-cafe-3.jpg"].map((src, i) => (
+            <div key={i} className="embla__slide" style={{ flex: "0 0 100%", height: "100%" }}>
+              <img
+                src={src}
+                alt={`Cafe slide ${i + 1}`}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* end carousel */}
         <div
           style={{
-            background: "rgba(0,0,0,0.4)",
+            /*background: "rgba(0,0,0,0.4)",
             padding: "3rem",
             borderRadius: 18,
             textAlign: "center",
-            maxWidth: 450,
+            maxWidth: 450,*/
+            position: "relative",
+            zIndex: 2,
+            background: "rgba(0,0,0,0.45)",
+            padding: "3rem",
+            borderRadius: 18,
+            textAlign: "center",
+            maxWidth: 500,
+            backdropFilter: "blur(2px)",
           }}
         >
           <h1 style={{ fontSize: "3rem", marginBottom: 0 }}>Cafe Aroma</h1>
@@ -116,12 +146,12 @@ export default function Home() {
             The city's coziest spot for coffee, chats, and chill.
           </p>
         </div>
-        {/* Fallback if hero image missing */}
+        {/* Fallback if hero image missing 
         <style>{`
           #hero {
             background-image: url('/hero-cafe.jpg'), linear-gradient(120deg, #a58b61 60%, #d2c6bb 100%);
-          }
-        `}</style>
+            }
+            `}</style>*/}
       </section>
 
       <section
