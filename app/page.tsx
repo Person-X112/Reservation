@@ -4,9 +4,24 @@ import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
+import LightGallery from "lightgallery/react";
+import lgZoom from "lightgallery/plugins/zoom";
+import lgThumbnail from "lightgallery/plugins/thumbnail";
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-zoom.css";
+import "lightgallery/css/lg-thumbnail.css";
+
 export default function Home() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [emblaRef] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 4000 })]);
+
+  // Dynamic elements for LightGallery
+  const images = ["gallery1.jpg", "gallery2.jpg", "gallery3.jpg"];
+
+  const dynamicEl = images.map((src, i) => ({
+    src: `/${src}`,
+    thumb: `/${src}`,
+    subHtml: `<h4>Gallery ${i + 1}</h4>`,}));
 
   return (
     <main
@@ -99,7 +114,6 @@ export default function Home() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          background: "url(/hero-cafe.jpg) center/cover no-repeat",
           color: "#fff",
           scrollSnapAlign: "start",
           position: "relative",
@@ -193,11 +207,18 @@ export default function Home() {
         }}
       >
         <h2>Gallery</h2>
-        <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center" }}>
-          {["gallery1.jpg", "gallery2.jpg", "gallery3.jpg"].map((src, i) => (
-            <ImageWithFallback key={i} src={`/${src}`} alt={`Gallery ${i + 1}`} />
-          ))}
-        </div>
+        {/* LightGallery will render the thumbnails and open the lightbox */}
+      <LightGallery
+        plugins={[lgZoom, lgThumbnail]}
+        speed={500}
+        elementClassNames="gallery-wrapper"
+      >
+        {images.map((src, i) => (
+          <a key={i} href={`/${src}`} className="gallery-item">
+            <ImageWithFallback src={`/${src}`} alt={`Gallery ${i + 1}`} />
+          </a>
+        ))}
+      </LightGallery>
       </section>
 
       <section
